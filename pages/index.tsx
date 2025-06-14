@@ -5,37 +5,47 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleAudit = async () => {
-    setLoading(true);
-    setError('');
+const handleAudit = async () => {
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await fetch('https://siteguard-backend.onrender.com/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
+  try {
+    const html = `
+      <html>
+        <head><title>Audit Report</title></head>
+        <body>
+          <h1>Audit Report for ${url}</h1>
+          <p>This is a placeholder PDF generated for: <strong>${url}</strong></p>
+        </body>
+      </html>
+    `;
 
-      if (!response.ok) {
-        throw new Error('Failed to generate audit');
-      }
+    const response = await fetch('https://siteguard-backend.onrender.com/generate-pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ html }),
+    });
 
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = 'audit-report.pdf';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred.');
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error('Failed to generate audit');
     }
-  };
+
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'audit-report.pdf';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err: any) {
+    setError(err.message || 'An unexpected error occurred.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
