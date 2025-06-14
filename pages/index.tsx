@@ -10,7 +10,7 @@ export default function Home() {
     setError('');
 
     try {
-      const response = await fetch('https://siteguard-backend.onrender.com/audit', {
+      const response = await fetch('https://siteguard-backend.onrender.com/generate-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
