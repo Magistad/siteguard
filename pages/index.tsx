@@ -80,5 +80,28 @@ export default function Home() {
       {/* Error message */}
       {error && <p className="z-10 text-red-500 mt-4">{error}</p>}
     </main>
+    <section className="bg-[#0a0a0a] text-white px-6 py-16 text-center border-t border-gray-800">
+  <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+    SiteGuard.io is the first to bring you military-grade AI website scanning.
+  </h2>
+  <p className="max-w-2xl mx-auto text-lg text-gray-300 mb-10">
+    Modeled after real-world cyber defense systems, SiteGuard audits your website using AI to identify and diagnose vulnerabilities, performance bottlenecks, SEO issues, and compliance risks—just like infrastructure-grade threat assessment platforms.
+  </p>
+
+  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 text-left max-w-4xl mx-auto text-gray-200 text-base sm:text-lg">
+    <div>✅ Security vulnerabilities & open port exposure</div>
+    <div>✅ Privacy compliance (GDPR, trackers, cookie notices)</div>
+    <div>✅ Performance optimization (speed, Core Web Vitals)</div>
+    <div>✅ SEO integrity (meta tags, schema, indexing signals)</div>
+    <div>✅ Accessibility compliance (WCAG audit)</div>
+    <div>✅ Mobile responsiveness & device readiness</div>
+    <div>✅ Blacklist & malware check (safe browsing status)</div>
+  </div>
+
+  <p className="mt-12 max-w-xl mx-auto text-gray-400 text-base">
+    Every scan delivers a full-spectrum, branded PDF report you can share with clients, forward to developers, or keep for your own digital command log.
+  </p>
+</section>
+
   );
 }
