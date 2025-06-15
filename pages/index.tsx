@@ -48,30 +48,30 @@ export default function Home() {
   };
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen bg-black text-white p-6 overflow-hidden">
-      {/* Background glow effect */}
+    <main className="relative flex flex-col items-center justify-center min-h-screen bg-black text-white px-4 py-8 sm:px-6 sm:py-12 overflow-hidden">
+      {/* Background glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0f1f2f] via-black to-[#000000] opacity-90 z-0" />
 
-      {/* Logo Only */}
+      {/* Logo */}
       <img
         src="/siteguard-logo-transparent.png"
         alt="SiteGuard Logo"
-        className="z-10 w-64 sm:w-80 md:w-96 drop-shadow-xl mb-8"
+        className="z-10 w-40 sm:w-48 md:w-64 drop-shadow-xl mb-10"
       />
 
-      {/* Input + CTA */}
-      <div className="z-10 mt-4 flex flex-col sm:flex-row gap-4 items-center">
+      {/* Input and CTA */}
+      <div className="z-10 w-full max-w-md flex flex-col sm:flex-row gap-4 items-center justify-center">
         <input
           type="text"
           placeholder="Enter your website URL"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="p-2 border rounded w-full max-w-md text-black"
+          className="w-full sm:flex-1 p-3 text-black rounded border"
         />
         <button
           onClick={handleAudit}
           disabled={loading}
-          className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-black font-semibold rounded shadow uppercase tracking-wide disabled:opacity-50"
+          className="w-full sm:w-auto px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-black font-semibold rounded uppercase tracking-wide disabled:opacity-50"
         >
           {loading ? 'Scanning...' : 'Run Audit'}
         </button>
