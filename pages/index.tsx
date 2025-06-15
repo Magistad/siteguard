@@ -52,25 +52,15 @@ export default function Home() {
       {/* Background glow effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0f1f2f] via-black to-[#000000] opacity-90 z-0" />
 
-      {/* Logo */}
+      {/* Logo Only */}
       <img
         src="/siteguard-logo-transparent.png"
         alt="SiteGuard Logo"
-        className="z-10 w-32 sm:w-40 md:w-48 drop-shadow-xl mb-6"
+        className="z-10 w-64 sm:w-80 md:w-96 drop-shadow-xl mb-8"
       />
 
-      {/* Headline */}
-      <h1 className="z-10 text-4xl sm:text-5xl md:text-6xl font-bold text-center tracking-wide">
-        SiteGuard
-      </h1>
-
-      {/* Tagline */}
-      <p className="z-10 mt-4 text-lg sm:text-xl max-w-xl mx-auto text-gray-300 text-center">
-        Military Grade AI Scanning Technology.
-      </p>
-
       {/* Input + CTA */}
-      <div className="z-10 mt-6 flex flex-col sm:flex-row gap-4 items-center">
+      <div className="z-10 mt-4 flex flex-col sm:flex-row gap-4 items-center">
         <input
           type="text"
           placeholder="Enter your website URL"
