@@ -50,7 +50,12 @@ export default function Home() {
   return (
     <div className="bg-black text-white min-h-screen">
       <main className="flex flex-col items-center justify-center px-4 py-8 z-10">
-        <div className="w-full max-w-md flex flex-col gap-4 items-center">
+        <div className="w-full max-w-md flex flex-col gap-6 items-center">
+          <img
+            src="/siteguard-emblem.png"
+            alt="SiteGuard Emblem"
+            className="w-40 sm:w-48 md:w-64 mb-8"
+          />
           <input
             type="text"
             placeholder="Enter your website URL"
