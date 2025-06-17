@@ -62,7 +62,7 @@ export default function Home() {
             placeholder="Enter your website URL"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="w-full p-3 text-black rounded border"
+            className="w-full p-3 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
           <button
             onClick={handleAudit}
