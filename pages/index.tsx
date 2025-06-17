@@ -48,15 +48,14 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <main className="relative flex flex-col items-center justify-center min-h-screen bg-black text-white px-4 py-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f1f2f] via-black to-[#000000] opacity-90 z-0" />
+    <div className="bg-black text-white min-h-screen">
+      <main className="flex flex-col items-center justify-center px-4 py-8 z-10">
         <img
           src="/siteguard-logo-transparent.png"
           alt="SiteGuard Logo"
-          className="z-10 w-40 sm:w-48 md:w-64 drop-shadow-xl mb-10"
+          className="w-40 sm:w-48 md:w-64 drop-shadow-xl mb-10"
         />
-        <div className="z-10 w-full max-w-md flex flex-col gap-4 items-center">
+        <div className="w-full max-w-md flex flex-col gap-4 items-center">
           <input
             type="text"
             placeholder="Enter your website URL"
@@ -72,10 +71,10 @@ export default function Home() {
             {loading ? 'Scanning...' : 'Run Audit'}
           </button>
         </div>
-        {error && <p className="z-10 text-red-500 mt-4">{error}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </main>
 
-      <section className="bg-[#0a0a0a] text-white px-6 py-16 text-center border-t border-gray-800">
+      <section className="bg-black text-white px-6 py-16 text-center border-t border-gray-800">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6">
           SiteGuard.io is the first to bring you military-grade AI website scanning.
         </h2>
