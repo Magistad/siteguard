@@ -1,5 +1,17 @@
 import { useState } from 'react';
 
+const logos = [
+  { src: "/logos/boeing.png", alt: "Boeing" },
+  { src: "/logos/general-dynamics.png", alt: "General Dynamics" },
+  { src: "/logos/lockheed-martin.png", alt: "Lockheed Martin" },
+  { src: "/logos/northrop-grumman.png", alt: "Northrop Grumman" },
+  { src: "/logos/raytheon.png", alt: "Raytheon" },
+  { src: "/logos/charles-schwab.png", alt: "Charles Schwab" },
+];
+
+// Duplicate enough times to ensure smooth looping
+const scrollingLogos = [...logos, ...logos, ...logos];
+
 export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,6 +62,26 @@ export default function Home() {
   return (
     <div className="bg-black text-white min-h-screen">
       <main className="flex flex-col items-center justify-center px-4 py-8 z-10">
+        <div className="w-full max-w-xl mb-4 flex flex-col items-center">
+          <p className="text-xs text-gray-400 mb-2 text-center tracking-wide">
+            Proudly scanning:
+          </p>
+          <div className="relative w-full overflow-x-hidden">
+            <div className="ticker-track flex items-center space-x-8">
+              {scrollingLogos.map((logo, idx) => (
+                <img
+                  key={logo.alt + idx}
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="text-sm sm:text-base text-gray-200 font-semibold mt-4 mb-4 text-center max-w-lg">
+          SiteGuard.io is the first to bring you military-grade AI website scanning.
+        </p>
         <div className="w-full max-w-md flex flex-col gap-6 items-center">
           <img
             src="/siteguard-emblem.png"
@@ -96,6 +128,17 @@ export default function Home() {
           Every scan delivers a full-spectrum, branded PDF report you can share with clients, forward to developers, or keep for your own digital command log.
         </p>
       </section>
+      <style jsx global>{`
+        .ticker-track {
+          width: 200%;
+          animation: ticker 5s linear infinite;
+        }
+        @keyframes ticker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   );
 }
+
