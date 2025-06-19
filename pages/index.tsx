@@ -9,7 +9,7 @@ const logos = [
   { src: "/logos/charles-schwab.png", alt: "Charles Schwab" },
 ];
 
-// Duplicate enough times to ensure smooth looping
+// Duplicate logos for seamless ticker animation
 const scrollingLogos = [...logos, ...logos, ...logos];
 
 export default function Home() {
@@ -79,15 +79,16 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <p className="text-sm sm:text-base text-gray-200 font-semibold mt-4 mb-4 text-center max-w-lg">
-          SiteGuard.io is the first to bring you military-grade AI website scanning.
-        </p>
         <div className="w-full max-w-md flex flex-col gap-6 items-center">
           <img
             src="/siteguard-emblem.png"
             alt="SiteGuard Emblem"
             className="w-40 sm:w-48 md:w-64 mb-8"
           />
+          {/* PDF Report Blurb */}
+          <p className="text-xs sm:text-sm text-gray-300 mb-2 text-center max-w-md">
+            Every scan delivers a full-spectrum, branded PDF report you can share with clients, forward to developers, or keep for your own digital command log.
+          </p>
           <input
             type="text"
             placeholder="Enter your website URL"
@@ -107,9 +108,7 @@ export default function Home() {
       </main>
 
       <section className="bg-black text-white px-6 py-16 text-center border-t border-gray-800">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-          SiteGuard.io is the first to bring you military-grade AI website scanning.
-        </h2>
+        {/* Removed the <h2> headline here */}
         <p className="max-w-2xl mx-auto text-lg text-gray-300 mb-10">
           Modeled after real-world cyber defense systems, SiteGuard audits your website using AI to identify and diagnose vulnerabilities, performance bottlenecks, SEO issues, and compliance risks—just like infrastructure-grade threat assessment platforms.
         </p>
@@ -124,9 +123,7 @@ export default function Home() {
           <div>✅ Blacklist & malware check (safe browsing status)</div>
         </div>
 
-        <p className="mt-12 max-w-xl mx-auto text-gray-400 text-base">
-          Every scan delivers a full-spectrum, branded PDF report you can share with clients, forward to developers, or keep for your own digital command log.
-        </p>
+        
       </section>
       <style jsx global>{`
         .ticker-track {
@@ -141,4 +138,6 @@ export default function Home() {
     </div>
   );
 }
+
+
 
