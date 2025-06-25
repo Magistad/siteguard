@@ -1,17 +1,5 @@
 import { useState } from 'react';
 
-const logos = [
-  { src: "/logos/boeing.png", alt: "Boeing" },
-  { src: "/logos/general-dynamics.png", alt: "General Dynamics" },
-  { src: "/logos/lockheed-martin.png", alt: "Lockheed Martin" },
-  { src: "/logos/northrop-grumman.png", alt: "Northrop Grumman" },
-  { src: "/logos/raytheon.png", alt: "Raytheon" },
-  { src: "/logos/charles-schwab.png", alt: "Charles Schwab" },
-];
-
-// Duplicate logos for seamless ticker animation
-const scrollingLogos = [...logos, ...logos, ...logos];
-
 export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -60,84 +48,80 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
-      <main className="flex flex-col items-center justify-center px-4 py-8 z-10">
-        <div className="w-full max-w-xl mb-4 flex flex-col items-center">
-          <p className="text-xs text-gray-400 mb-2 text-center tracking-wide">
-            Proudly scanning:
-          </p>
-          <div className="relative w-full overflow-x-hidden">
-            <div className="ticker-track flex items-center space-x-8">
-              {scrollingLogos.map((logo, idx) => (
-                <img
-                  key={logo.alt + idx}
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all"
-                />
-              ))}
-            </div>
+    <div className="bg-black text-white min-h-screen flex flex-col">
+      {/* Header/Logo */}
+      <header className="flex flex-col items-center justify-center py-8 bg-black">
+        <img
+          src="/siteguard-shield-logo.png"
+          alt="SITEGUARD Shield Logo"
+          className="w-40 md:w-56 mb-6 drop-shadow-lg"
+        />
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-widest uppercase text-center mb-2">
+          Military-Grade Website Security & Compliance Scan
+        </h1>
+        <p className="text-gray-300 max-w-xl text-center text-lg mb-6">
+          Instantly audit any website for vulnerabilities, malware, privacy risks, and compliance gaps.<br />
+          One-time, full-spectrum risk scan. Branded PDF report included.
+        </p>
+      </header>
+
+      {/* Main Scan Block */}
+      <main className="flex flex-col items-center flex-1 justify-center px-4">
+        <div className="w-full max-w-xl bg-gray-900/70 rounded-2xl shadow-xl p-8 flex flex-col items-center">
+          <form
+            className="w-full flex flex-col items-center gap-4"
+            onSubmit={e => {
+              e.preventDefault();
+              handleAudit();
+            }}
+          >
+            <label htmlFor="url" className="sr-only">Website URL</label>
+            <input
+              id="url"
+              type="text"
+              placeholder="Enter your website URL (e.g. https://example.com)"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              className="w-full p-3 bg-white text-gray-900 rounded border border-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-base"
+              autoFocus
+            />
+            <button
+              type="submit"
+              disabled={loading || !url}
+              className="w-full px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg uppercase tracking-wider transition disabled:opacity-50"
+            >
+              {loading ? 'Scanning...' : 'Run Audit'}
+            </button>
+          </form>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
+
+          {/* Professional Feature checklist */}
+          <ul className="mt-8 mb-2 w-full grid sm:grid-cols-2 gap-x-8 gap-y-3 text-base">
+            <li><span className="font-semibold text-cyan-400">Security headers</span> & HTTPS enforcement</li>
+            <li><span className="font-semibold text-cyan-400">Malware/blacklist</span> (Google Safe Browsing)</li>
+            <li><span className="font-semibold text-cyan-400">Performance, SEO, accessibility</span> scan</li>
+            <li><span className="font-semibold text-cyan-400">Trackers & analytics</span> detection</li>
+            <li><span className="font-semibold text-cyan-400">Sensitive file/config</span> exposure scan</li>
+            <li><span className="font-semibold text-cyan-400">WHOIS/domain age & IP reputation</span></li>
+            <li><span className="font-semibold text-cyan-400">Compliance & privacy banner</span> check</li>
+            <li><span className="font-semibold text-cyan-400">Branded PDF</span> client-ready report</li>
+          </ul>
+
+          <div className="text-center mt-6 text-gray-400 text-xs">
+            <span>Trusted by organizations worldwide.</span>
           </div>
         </div>
-        <div className="w-full max-w-md flex flex-col gap-6 items-center">
-          <img
-            src="/siteguard-emblem.png"
-            alt="SiteGuard Emblem"
-            className="w-40 sm:w-48 md:w-64 mb-8"
-          />
-          {/* PDF Report Blurb */}
-          <p className="text-xs sm:text-sm text-gray-300 mb-2 text-center max-w-md">
-            Every scan delivers a full-spectrum, branded PDF report you can share with clients, forward to developers, or keep for your own digital command log.
-          </p>
-          <input
-            type="text"
-            placeholder="Enter your website URL"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            className="w-full p-3 bg-white text-gray-900 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
-          <button
-            onClick={handleAudit}
-            disabled={loading}
-            className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-black font-semibold rounded uppercase tracking-wide disabled:opacity-50"
-          >
-            {loading ? 'Scanning...' : 'Run Audit'}
-          </button>
-        </div>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
       </main>
 
-      <section className="bg-black text-white px-6 py-16 text-center border-t border-gray-800">
-        {/* Removed the <h2> headline here */}
-        <p className="max-w-2xl mx-auto text-lg text-gray-300 mb-10">
-          Modeled after real-world cyber defense systems, SiteGuard audits your website using AI to identify and diagnose vulnerabilities, performance bottlenecks, SEO issues, and compliance risks—just like infrastructure-grade threat assessment platforms.
-        </p>
-
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 text-left max-w-4xl mx-auto text-gray-200 text-base sm:text-lg">
-          <div>✅ Security vulnerabilities & open port exposure</div>
-          <div>✅ Privacy compliance (GDPR, trackers, cookie notices)</div>
-          <div>✅ Performance optimization (speed, Core Web Vitals)</div>
-          <div>✅ SEO integrity (meta tags, schema, indexing signals)</div>
-          <div>✅ Accessibility compliance (WCAG audit)</div>
-          <div>✅ Mobile responsiveness & device readiness</div>
-          <div>✅ Blacklist & malware check (safe browsing status)</div>
-        </div>
-
-        
-      </section>
-      <style jsx global>{`
-        .ticker-track {
-          width: 200%;
-          animation: ticker 5s linear infinite;
-        }
-        @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+      {/* Footer */}
+      <footer className="mt-12 py-8 bg-black text-gray-500 text-sm text-center border-t border-gray-800">
+        &copy; {new Date().getFullYear()} SITEGUARD.io &mdash; Military-Grade Website Auditing. <br />
+        <span className="block mt-1">Need help? <a href="mailto:support@siteguard.io" className="text-cyan-400 underline">Contact Support</a></span>
+      </footer>
     </div>
   );
 }
+
 
 
 
