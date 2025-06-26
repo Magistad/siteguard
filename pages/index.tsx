@@ -56,7 +56,7 @@ export default function Home() {
           alt="SITEGUARD Shield Logo"
           className="w-40 md:w-56 mb-6 drop-shadow-lg"
         />
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-widest uppercase text-center mb-2">
+        <h1 className="text-xl sm:text-2xl font-extrabold tracking-widest uppercase text-center mb-2">
           Military-Grade Website Security & Compliance Scan
         </h1>
         <p className="text-gray-300 max-w-xl text-center text-lg mb-6">
@@ -106,6 +106,9 @@ export default function Home() {
             <li><span className="font-semibold text-cyan-400">Compliance & privacy banner</span> check</li>
             <li><span className="font-semibold text-cyan-400">Branded PDF</span> client-ready report</li>
           </ul>
+<div className="mt-6 text-gray-400 text-sm text-center max-w-lg">
+  SiteGuard scans reference best practices from <b>NIST 800-53</b>, <b>CISA</b>, and <b>OWASP Top 10</b>.
+</div>
 
           <div className="text-center mt-6 text-gray-400 text-xs">
             <span>Trusted by organizations worldwide.</span>
