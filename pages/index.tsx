@@ -2,9 +2,37 @@ import { useState } from 'react';
 
 export default function Home() {
   const [url, setUrl] = useState('');
+  const [scanUnlocked, setScanUnlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Stripe config
+  const stripePublicKey = 'pk_live_51OMlp3II1hyfpOcHfX4V9YOUmOV62ycUiqsIvxHffu8HyAHTlzvfkiPiLO1FsucLGVaMSvwaBvtUS8pIXQTHO8uL00V8Dj0HmS';
+  const priceId = 'price_1ReKWhII1hyfpOcHb8C0yzQH';
+
+  // Handle payment via Stripe Checkout
+  const handlePay = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      // Dynamically load Stripe.js
+      const stripeJs = await loadStripe(stripePublicKey);
+      // Create Checkout session via Stripe Checkout
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId, url }),
+      });
+      const { sessionId } = await res.json();
+      await stripeJs.redirectToCheckout({ sessionId });
+    } catch (err: any) {
+      setError('Payment error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Run the scan (after payment)
   const handleAudit = async () => {
     setLoading(true);
     setError('');
@@ -47,6 +75,30 @@ export default function Home() {
     }
   };
 
+  // Stripe.js loader (standalone for Next.js, not SSR)
+  function loadStripe(pk: string) {
+    return new Promise<any>((resolve, reject) => {
+      if ((window as any).Stripe) {
+        resolve((window as any).Stripe(pk));
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.async = true;
+      script.onload = () => resolve((window as any).Stripe(pk));
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
+  }
+
+  // Unlock scan after successful payment (Stripe will redirect to /scan-success)
+  // For MVP, we check for ?unlocked in the URL
+  if (typeof window !== 'undefined' && !scanUnlocked) {
+    if (window.location.pathname === '/scan-success') {
+      setScanUnlocked(true);
+    }
+  }
+
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">
       {/* Header/Logo */}
@@ -54,7 +106,7 @@ export default function Home() {
         <img
           src="/siteguard-shield-logo.png"
           alt="SITEGUARD Shield Logo"
-          className="w-40 md:w-56 mb-6 drop-shadow-lg"
+          className="w-32 md:w-44 mb-4 drop-shadow-lg"
         />
         <h1 className="text-xl sm:text-2xl font-extrabold tracking-widest uppercase text-center mb-2">
           Military-Grade Website Security & Compliance Scan
@@ -68,31 +120,67 @@ export default function Home() {
       {/* Main Scan Block */}
       <main className="flex flex-col items-center flex-1 justify-center px-4">
         <div className="w-full max-w-xl bg-gray-900/70 rounded-2xl shadow-xl p-8 flex flex-col items-center">
-          <form
-            className="w-full flex flex-col items-center gap-4"
-            onSubmit={e => {
-              e.preventDefault();
-              handleAudit();
-            }}
-          >
-            <label htmlFor="url" className="sr-only">Website URL</label>
-            <input
-              id="url"
-              type="text"
-              placeholder="Enter your website URL (e.g. https://example.com)"
-              value={url}
-              onChange={e => setUrl(e.target.value)}
-              className="w-full p-3 bg-white text-gray-900 rounded border border-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-base"
-              autoFocus
-            />
-            <button
-              type="submit"
-              disabled={loading || !url}
-              className="w-full px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg uppercase tracking-wider transition disabled:opacity-50"
-            >
-              {loading ? 'Scanning...' : 'Run Audit'}
-            </button>
-          </form>
+          {!scanUnlocked ? (
+            <>
+              <form
+                className="w-full flex flex-col items-center gap-4"
+                onSubmit={e => {
+                  e.preventDefault();
+                  handlePay();
+                }}
+              >
+                <label htmlFor="url" className="sr-only">Website URL</label>
+                <input
+                  id="url"
+                  type="text"
+                  placeholder="Enter your website URL (e.g. https://example.com)"
+                  value={url}
+                  onChange={e => setUrl(e.target.value)}
+                  className="w-full p-3 bg-white text-gray-900 rounded border border-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-base"
+                  autoFocus
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !url}
+                  className="w-full px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg uppercase tracking-wider transition disabled:opacity-50"
+                >
+                  {loading ? 'Redirecting to payment...' : 'Pay & Run Scan'}
+                </button>
+              </form>
+              <div className="text-xs text-gray-400 mt-4 text-center">
+                One-time payment. Instant PDF report. No subscription required.
+              </div>
+            </>
+          ) : (
+            <>
+              <form
+                className="w-full flex flex-col items-center gap-4"
+                onSubmit={e => {
+                  e.preventDefault();
+                  handleAudit();
+                }}
+              >
+                <label htmlFor="url" className="sr-only">Website URL</label>
+                <input
+                  id="url"
+                  type="text"
+                  placeholder="Enter your website URL (e.g. https://example.com)"
+                  value={url}
+                  onChange={e => setUrl(e.target.value)}
+                  className="w-full p-3 bg-white text-gray-900 rounded border border-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-base"
+                  autoFocus
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !url}
+                  className="w-full px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg uppercase tracking-wider transition disabled:opacity-50"
+                >
+                  {loading ? 'Scanning...' : 'Run Audit'}
+                </button>
+              </form>
+            </>
+          )}
           {error && <p className="text-red-500 mt-4">{error}</p>}
 
           {/* Professional Feature checklist */}
@@ -106,9 +194,10 @@ export default function Home() {
             <li><span className="font-semibold text-cyan-400">Compliance & privacy banner</span> check</li>
             <li><span className="font-semibold text-cyan-400">Branded PDF</span> client-ready report</li>
           </ul>
-<div className="mt-6 text-gray-400 text-sm text-center max-w-lg">
-  SiteGuard scans reference best practices from <b>NIST 800-53</b>, <b>CISA</b>, and <b>OWASP Top 10</b>.
-</div>
+
+          <div className="mt-6 text-gray-400 text-sm text-center max-w-lg">
+            SiteGuard scans reference best practices from <b>NIST 800-53</b>, <b>CISA</b>, and <b>OWASP Top 10</b>.
+          </div>
 
           <div className="text-center mt-6 text-gray-400 text-xs">
             <span>Trusted by organizations worldwide.</span>
@@ -119,7 +208,10 @@ export default function Home() {
       {/* Footer */}
       <footer className="mt-12 py-8 bg-black text-gray-500 text-sm text-center border-t border-gray-800">
         &copy; {new Date().getFullYear()} SITEGUARD.io &mdash; Military-Grade Website Auditing. <br />
-        <span className="block mt-1">Need help? <a href="mailto:support@siteguard.io" className="text-cyan-400 underline">Contact Support</a></span>
+        <span className="block mt-1">
+          SiteGuard scans reference best practices from <b>NIST 800-53</b>, <b>CISA</b>, and <b>OWASP Top 10</b>.<br/>
+          Need help? <a href="mailto:support@siteguard.io" className="text-cyan-400 underline">Contact Support</a>
+        </span>
       </footer>
     </div>
   );
