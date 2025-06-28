@@ -6,18 +6,20 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Stripe config
-  const stripePublicKey = 'pk_live_51OMlp3II1hyfpOcHfX4V9YOUmOV62ycUiqsIvxHffu8HyAHTlzvfkiPiLO1FsucLGVaMSvwaBvtUS8pIXQTHO8uL00V8Dj0HmS';
-  const priceId = 'price_1ReKWhII1hyfpOcHb8C0yzQH';
+  // STRIPE TEST KEY (replace with your live key for production)
+  const stripePublicKey = 'pk_test_51OMlp3II1hyfpOcHu1onMSKnhWRxXQDXrPGhifgcgTSSJrnHTDG7dvUII5cS2OqE0ro2CAVY9dK1cbNAMFZCt3aG00wheZxZsE'; 
+  const priceId = 'price_1RegEHII1hyfpOcHii7FQP0W';
 
-  // Handle payment via Stripe Checkout
   const handlePay = async () => {
     setLoading(true);
     setError('');
     try {
+      // Save the URL to localStorage for scan-success to read after payment
+      if (typeof window !== 'undefined' && url) {
+        localStorage.setItem('siteguard_last_url', url);
+      }
       // Dynamically load Stripe.js
       const stripeJs = await loadStripe(stripePublicKey);
-      // Create Checkout session via Stripe Checkout
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -32,7 +34,6 @@ export default function Home() {
     }
   };
 
-  // Run the scan (after payment)
   const handleAudit = async () => {
     setLoading(true);
     setError('');
@@ -75,7 +76,6 @@ export default function Home() {
     }
   };
 
-  // Stripe.js loader (standalone for Next.js, not SSR)
   function loadStripe(pk: string) {
     return new Promise<any>((resolve, reject) => {
       if ((window as any).Stripe) {
@@ -91,8 +91,6 @@ export default function Home() {
     });
   }
 
-  // Unlock scan after successful payment (Stripe will redirect to /scan-success)
-  // For MVP, we check for ?unlocked in the URL
   if (typeof window !== 'undefined' && !scanUnlocked) {
     if (window.location.pathname === '/scan-success') {
       setScanUnlocked(true);
@@ -101,7 +99,6 @@ export default function Home() {
 
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">
-      {/* Header/Logo */}
       <header className="flex flex-col items-center justify-center py-8 bg-black">
         <img
           src="/siteguard-shield-logo.png"
@@ -117,7 +114,6 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Main Scan Block */}
       <main className="flex flex-col items-center flex-1 justify-center px-4">
         <div className="w-full max-w-xl bg-gray-900/70 rounded-2xl shadow-xl p-8 flex flex-col items-center">
           {!scanUnlocked ? (
@@ -183,7 +179,6 @@ export default function Home() {
           )}
           {error && <p className="text-red-500 mt-4">{error}</p>}
 
-          {/* Professional Feature checklist */}
           <ul className="mt-8 mb-2 w-full grid sm:grid-cols-2 gap-x-8 gap-y-3 text-base">
             <li><span className="font-semibold text-cyan-400">Security headers</span> & HTTPS enforcement</li>
             <li><span className="font-semibold text-cyan-400">Malware/blacklist</span> (Google Safe Browsing)</li>
@@ -205,7 +200,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="mt-12 py-8 bg-black text-gray-500 text-sm text-center border-t border-gray-800">
         &copy; {new Date().getFullYear()} SITEGUARD.io &mdash; Military-Grade Website Auditing. <br />
         <span className="block mt-1">
@@ -216,6 +210,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
