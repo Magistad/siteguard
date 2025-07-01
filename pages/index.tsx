@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -7,18 +8,16 @@ export default function Home() {
   const [error, setError] = useState('');
 
   // STRIPE TEST KEY (replace with your live key for production)
-  const stripePublicKey = 'pk_test_51OMlp3II1hyfpOcHu1onMSKnhWRxXQDXrPGhifgcgTSSJrnHTDG7dvUII5cS2OqE0ro2CAVY9dK1cbNAMFZCt3aG00wheZxZsE'; 
-  const priceId = 'price_1RegEHII1hyfpOcHii7FQP0W';
+  const stripePublicKey = 'pk_test_...'; // Update this as needed
+  const priceId = 'price_...'; // Update this as needed
 
   const handlePay = async () => {
     setLoading(true);
     setError('');
     try {
-      // Save the URL to localStorage for scan-success to read after payment
       if (typeof window !== 'undefined' && url) {
         localStorage.setItem('siteguard_last_url', url);
       }
-      // Dynamically load Stripe.js
       const stripeJs = await loadStripe(stripePublicKey);
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -37,7 +36,6 @@ export default function Home() {
   const handleAudit = async () => {
     setLoading(true);
     setError('');
-
     try {
       const html = `
         <html>
@@ -48,7 +46,6 @@ export default function Home() {
           </body>
         </html>
       `;
-
       const response = await fetch('https://siteguard-backend.onrender.com/generate-pdf', {
         method: 'POST',
         headers: {
@@ -56,11 +53,9 @@ export default function Home() {
         },
         body: JSON.stringify({ html }),
       });
-
       if (!response.ok) {
         throw new Error('Failed to generate audit');
       }
-
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -147,6 +142,14 @@ export default function Home() {
               <div className="text-xs text-gray-400 mt-4 text-center">
                 One-time payment. Instant PDF report. No subscription required.
               </div>
+              {/* View Sample Report button */}
+              <div className="w-full flex justify-center mt-6">
+                <Link href="/sample-report">
+                  <button className="px-6 py-2 bg-cyan-700 hover:bg-cyan-500 text-white font-semibold rounded-lg uppercase tracking-wide shadow transition">
+                    View Sample Report
+                  </button>
+                </Link>
+              </div>
             </>
           ) : (
             <>
@@ -197,6 +200,30 @@ export default function Home() {
           <div className="text-center mt-6 text-gray-400 text-xs">
             <span>Trusted by organizations worldwide.</span>
           </div>
+
+          {/* Badges for NIST, CISA, OWASP */}
+          <div className="w-full flex justify-center mt-4">
+            <div className="flex gap-4 items-center">
+              <img
+                src="/badges/nist.png"
+                alt="NIST 800-53"
+                className="h-10 w-auto object-contain"
+                style={{ maxWidth: 80 }}
+              />
+              <img
+                src="/badges/cisa.png"
+                alt="CISA"
+                className="h-10 w-auto object-contain"
+                style={{ maxWidth: 80 }}
+              />
+              <img
+                src="/badges/owasp.png"
+                alt="OWASP Top 10"
+                className="h-10 w-auto object-contain"
+                style={{ maxWidth: 80 }}
+              />
+            </div>
+          </div>
         </div>
       </main>
 
@@ -210,6 +237,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
