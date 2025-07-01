@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 // Explanations for custom security issues
-const SECURITY_EXPLANATIONS = {
+const SECURITY_EXPLANATIONS: Record<string, { why: string; fix: string }> = {
   'hsts-missing': {
     why: 'Without HTTP Strict Transport Security (HSTS), browsers may allow users to access your site over insecure HTTP.',
     fix: 'Add a Strict-Transport-Security header to your server response (e.g., `Strict-Transport-Security: max-age=31536000; includeSubDomains`).',
