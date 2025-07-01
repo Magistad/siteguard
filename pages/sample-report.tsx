@@ -1,7 +1,15 @@
 import Link from 'next/link';
 
-// Sample data mimicking a real scan
-const SAMPLE_SCAN = {
+// Type-safe sample data
+const SAMPLE_SCAN: {
+  url: string;
+  overallScore: number;
+  summary: Record<string, number>;
+  security: any;
+  issues: any[];
+  passes: any[];
+  failedAudits: Record<string, any[]>;
+} = {
   url: 'https://www.big-enterprise-demo.com',
   overallScore: 0.82,
   summary: {
@@ -44,7 +52,6 @@ const SAMPLE_SCAN = {
       why: 'Site is not flagged as dangerous or infected by Google Safe Browsing.',
     },
   ],
-  // Demo Lighthouse-style failed audits for each category
   failedAudits: {
     performance: [
       {
