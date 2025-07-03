@@ -228,12 +228,18 @@ export default function Home() {
       </main>
 
       <footer className="mt-12 py-8 bg-black text-gray-500 text-sm text-center border-t border-gray-800">
-        &copy; {new Date().getFullYear()} SITEGUARD.io &mdash; Military-Grade Website Auditing. <br />
-        <span className="block mt-1">
-          SiteGuard scans reference best practices from <b>NIST 800-53</b>, <b>CISA</b>, and <b>OWASP Top 10</b>.<br/>
-          Need help? <a href="mailto:support@siteguard.io" className="text-cyan-400 underline">Contact Support</a>
-        </span>
-      </footer>
+  <div className="mb-1">
+    <Link href="/terms" className="underline text-cyan-400 mr-4">Terms of Service</Link>
+    <Link href="/privacy" className="underline text-cyan-400">Privacy Policy</Link>
+  </div>
+  <div>
+    &copy; {new Date().getFullYear()} SITEGUARD.io — Military-Grade Website Auditing.<br />
+    <span className="block mt-1">
+      SiteGuard.io is a product of <span className="font-semibold">Anzen Digital Media LLC</span>.<br/>
+      Need help? <a href="mailto:support@siteguard.io" className="text-cyan-400 underline">Contact Support</a>
+    </span>
+  </div>
+</footer>
     </div>
   );
 }
